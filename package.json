@@ -15,22 +15,25 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.9.0",
     "@prisma/client": "^7.9.0",
-    "dotenv": "^17.4.2",
+    "dotenv": "^17.0.0",
     "next": "16.2.11",
-    "react": "latest",
-    "react-dom": "latest",
-    "zod": "latest"
+    "pg": "^8.22.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@playwright/test": "latest",
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "@vitest/coverage-v8": "latest",
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.10.0",
+    "@types/pg": "^8.20.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitest/coverage-v8": "^3.0.0",
     "prisma": "^7.9.0",
-    "typescript": "latest",
-    "vite": "latest",
-    "vitest": "latest"
+    "typescript": "^5.7.3",
+    "vite": "^6.0.0",
+    "vitest": "^3.0.0"
   }
 }

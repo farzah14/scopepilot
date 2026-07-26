@@ -1,6 +1,6 @@
 import { expect, it, vi } from 'vitest';
 
-vi.mock('@/db/client', () => ({
+vi.mock('../../../db/client', () => ({
   db: { $queryRaw: vi.fn().mockResolvedValue([{ ok: 1 }]) },
 }));
 

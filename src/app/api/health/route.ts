@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/db/client';
-import { checkDatabaseHealth } from '@/health/database-health';
+import { db } from '../../../db/client';
+import { checkDatabaseHealth } from '../../../health/database-health';
 
 export async function GET() {
   try {
