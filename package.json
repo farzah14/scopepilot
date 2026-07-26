@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.13.1",
-  "engines": { "node": ">=22.12.0" },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,6 +14,23 @@
     "test": "vitest run",
     "test:e2e": "playwright test"
   },
-  "dependencies": { "next": "16.2.11", "react": "latest", "react-dom": "latest", "zod": "latest" },
-  "devDependencies": { "@playwright/test": "latest", "@types/node": "latest", "@types/react": "latest", "@types/react-dom": "latest", "@vitest/coverage-v8": "latest", "typescript": "latest", "vite": "latest", "vitest": "latest" }
+  "dependencies": {
+    "@prisma/client": "^7.9.0",
+    "dotenv": "^17.4.2",
+    "next": "16.2.11",
+    "react": "latest",
+    "react-dom": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@playwright/test": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitest/coverage-v8": "latest",
+    "prisma": "^7.9.0",
+    "typescript": "latest",
+    "vite": "latest",
+    "vitest": "latest"
+  }
 }
