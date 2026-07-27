@@ -1,5 +1,6 @@
 import { requireMembership } from '@/auth/require-membership';
 import { clientInput, updateClientInput } from './client-schema';
+import { ClientNotFoundError } from '@/errors/domain-errors';
 
 export async function listClients(db: any, userId: string, organizationId: string) {
   await requireMembership(db, userId, organizationId, 'records:view');
@@ -31,7 +32,7 @@ export async function getClient(db: any, userId: string, organizationId: string,
   });
 
   if (!client) {
-    throw new Error('CLIENT_NOT_FOUND');
+    throw new ClientNotFoundError();
   }
 
   return client;
@@ -80,7 +81,7 @@ export async function updateClient(
     });
 
     if (!existing) {
-      throw new Error('CLIENT_NOT_FOUND');
+      throw new ClientNotFoundError();
     }
 
     const updated = await tx.client.update({
@@ -112,7 +113,7 @@ export async function archiveClient(db: any, userId: string, organizationId: str
     });
 
     if (!existing) {
-      throw new Error('CLIENT_NOT_FOUND');
+      throw new ClientNotFoundError();
     }
 
     const archived = await tx.client.update({

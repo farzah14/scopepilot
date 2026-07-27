@@ -287,6 +287,7 @@ export type ProjectWhereInput = {
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  ownerMembership?: Prisma.XOR<Prisma.MembershipScalarRelationFilter, Prisma.MembershipWhereInput>
 }
 
 export type ProjectOrderByWithRelationInput = {
@@ -306,6 +307,7 @@ export type ProjectOrderByWithRelationInput = {
   organization?: Prisma.OrganizationOrderByWithRelationInput
   client?: Prisma.ClientOrderByWithRelationInput
   owner?: Prisma.UserOrderByWithRelationInput
+  ownerMembership?: Prisma.MembershipOrderByWithRelationInput
 }
 
 export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -328,6 +330,7 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  ownerMembership?: Prisma.XOR<Prisma.MembershipScalarRelationFilter, Prisma.MembershipWhereInput>
 }, "id">
 
 export type ProjectOrderByWithAggregationInput = {
@@ -384,6 +387,7 @@ export type ProjectCreateInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutProjectsInput
   client: Prisma.ClientCreateNestedOneWithoutProjectsInput
   owner: Prisma.UserCreateNestedOneWithoutOwnedProjectsInput
+  ownerMembership: Prisma.MembershipCreateNestedOneWithoutOwnedProjectsInput
 }
 
 export type ProjectUncheckedCreateInput = {
@@ -416,6 +420,7 @@ export type ProjectUpdateInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProjectsNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutProjectsNestedInput
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProjectsNestedInput
+  ownerMembership?: Prisma.MembershipUpdateOneRequiredWithoutOwnedProjectsNestedInput
 }
 
 export type ProjectUncheckedUpdateInput = {
@@ -631,6 +636,48 @@ export type ProjectUncheckedUpdateManyWithoutOrganizationNestedInput = {
   deleteMany?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[]
 }
 
+export type ProjectCreateNestedManyWithoutOwnerMembershipInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutOwnerMembershipInput, Prisma.ProjectUncheckedCreateWithoutOwnerMembershipInput> | Prisma.ProjectCreateWithoutOwnerMembershipInput[] | Prisma.ProjectUncheckedCreateWithoutOwnerMembershipInput[]
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutOwnerMembershipInput | Prisma.ProjectCreateOrConnectWithoutOwnerMembershipInput[]
+  createMany?: Prisma.ProjectCreateManyOwnerMembershipInputEnvelope
+  connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+}
+
+export type ProjectUncheckedCreateNestedManyWithoutOwnerMembershipInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutOwnerMembershipInput, Prisma.ProjectUncheckedCreateWithoutOwnerMembershipInput> | Prisma.ProjectCreateWithoutOwnerMembershipInput[] | Prisma.ProjectUncheckedCreateWithoutOwnerMembershipInput[]
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutOwnerMembershipInput | Prisma.ProjectCreateOrConnectWithoutOwnerMembershipInput[]
+  createMany?: Prisma.ProjectCreateManyOwnerMembershipInputEnvelope
+  connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+}
+
+export type ProjectUpdateManyWithoutOwnerMembershipNestedInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutOwnerMembershipInput, Prisma.ProjectUncheckedCreateWithoutOwnerMembershipInput> | Prisma.ProjectCreateWithoutOwnerMembershipInput[] | Prisma.ProjectUncheckedCreateWithoutOwnerMembershipInput[]
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutOwnerMembershipInput | Prisma.ProjectCreateOrConnectWithoutOwnerMembershipInput[]
+  upsert?: Prisma.ProjectUpsertWithWhereUniqueWithoutOwnerMembershipInput | Prisma.ProjectUpsertWithWhereUniqueWithoutOwnerMembershipInput[]
+  createMany?: Prisma.ProjectCreateManyOwnerMembershipInputEnvelope
+  set?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  disconnect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  delete?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  update?: Prisma.ProjectUpdateWithWhereUniqueWithoutOwnerMembershipInput | Prisma.ProjectUpdateWithWhereUniqueWithoutOwnerMembershipInput[]
+  updateMany?: Prisma.ProjectUpdateManyWithWhereWithoutOwnerMembershipInput | Prisma.ProjectUpdateManyWithWhereWithoutOwnerMembershipInput[]
+  deleteMany?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[]
+}
+
+export type ProjectUncheckedUpdateManyWithoutOwnerMembershipNestedInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutOwnerMembershipInput, Prisma.ProjectUncheckedCreateWithoutOwnerMembershipInput> | Prisma.ProjectCreateWithoutOwnerMembershipInput[] | Prisma.ProjectUncheckedCreateWithoutOwnerMembershipInput[]
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutOwnerMembershipInput | Prisma.ProjectCreateOrConnectWithoutOwnerMembershipInput[]
+  upsert?: Prisma.ProjectUpsertWithWhereUniqueWithoutOwnerMembershipInput | Prisma.ProjectUpsertWithWhereUniqueWithoutOwnerMembershipInput[]
+  createMany?: Prisma.ProjectCreateManyOwnerMembershipInputEnvelope
+  set?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  disconnect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  delete?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  update?: Prisma.ProjectUpdateWithWhereUniqueWithoutOwnerMembershipInput | Prisma.ProjectUpdateWithWhereUniqueWithoutOwnerMembershipInput[]
+  updateMany?: Prisma.ProjectUpdateManyWithWhereWithoutOwnerMembershipInput | Prisma.ProjectUpdateManyWithWhereWithoutOwnerMembershipInput[]
+  deleteMany?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[]
+}
+
 export type ProjectCreateNestedManyWithoutClientInput = {
   create?: Prisma.XOR<Prisma.ProjectCreateWithoutClientInput, Prisma.ProjectUncheckedCreateWithoutClientInput> | Prisma.ProjectCreateWithoutClientInput[] | Prisma.ProjectUncheckedCreateWithoutClientInput[]
   connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutClientInput | Prisma.ProjectCreateOrConnectWithoutClientInput[]
@@ -690,6 +737,7 @@ export type ProjectCreateWithoutOwnerInput = {
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutProjectsInput
   client: Prisma.ClientCreateNestedOneWithoutProjectsInput
+  ownerMembership: Prisma.MembershipCreateNestedOneWithoutOwnedProjectsInput
 }
 
 export type ProjectUncheckedCreateWithoutOwnerInput = {
@@ -765,6 +813,7 @@ export type ProjectCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   client: Prisma.ClientCreateNestedOneWithoutProjectsInput
   owner: Prisma.UserCreateNestedOneWithoutOwnedProjectsInput
+  ownerMembership: Prisma.MembershipCreateNestedOneWithoutOwnedProjectsInput
 }
 
 export type ProjectUncheckedCreateWithoutOrganizationInput = {
@@ -808,6 +857,62 @@ export type ProjectUpdateManyWithWhereWithoutOrganizationInput = {
   data: Prisma.XOR<Prisma.ProjectUpdateManyMutationInput, Prisma.ProjectUncheckedUpdateManyWithoutOrganizationInput>
 }
 
+export type ProjectCreateWithoutOwnerMembershipInput = {
+  id?: string
+  name: string
+  projectType: string
+  status?: $Enums.ProjectStatus
+  budgetMinCents?: number | null
+  budgetMaxCents?: number | null
+  targetStartAt?: Date | string | null
+  targetEndAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutProjectsInput
+  client: Prisma.ClientCreateNestedOneWithoutProjectsInput
+  owner: Prisma.UserCreateNestedOneWithoutOwnedProjectsInput
+}
+
+export type ProjectUncheckedCreateWithoutOwnerMembershipInput = {
+  id?: string
+  clientId: string
+  name: string
+  projectType: string
+  status?: $Enums.ProjectStatus
+  budgetMinCents?: number | null
+  budgetMaxCents?: number | null
+  targetStartAt?: Date | string | null
+  targetEndAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ProjectCreateOrConnectWithoutOwnerMembershipInput = {
+  where: Prisma.ProjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutOwnerMembershipInput, Prisma.ProjectUncheckedCreateWithoutOwnerMembershipInput>
+}
+
+export type ProjectCreateManyOwnerMembershipInputEnvelope = {
+  data: Prisma.ProjectCreateManyOwnerMembershipInput | Prisma.ProjectCreateManyOwnerMembershipInput[]
+  skipDuplicates?: boolean
+}
+
+export type ProjectUpsertWithWhereUniqueWithoutOwnerMembershipInput = {
+  where: Prisma.ProjectWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProjectUpdateWithoutOwnerMembershipInput, Prisma.ProjectUncheckedUpdateWithoutOwnerMembershipInput>
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutOwnerMembershipInput, Prisma.ProjectUncheckedCreateWithoutOwnerMembershipInput>
+}
+
+export type ProjectUpdateWithWhereUniqueWithoutOwnerMembershipInput = {
+  where: Prisma.ProjectWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProjectUpdateWithoutOwnerMembershipInput, Prisma.ProjectUncheckedUpdateWithoutOwnerMembershipInput>
+}
+
+export type ProjectUpdateManyWithWhereWithoutOwnerMembershipInput = {
+  where: Prisma.ProjectScalarWhereInput
+  data: Prisma.XOR<Prisma.ProjectUpdateManyMutationInput, Prisma.ProjectUncheckedUpdateManyWithoutOwnerMembershipInput>
+}
+
 export type ProjectCreateWithoutClientInput = {
   id?: string
   name: string
@@ -821,11 +926,11 @@ export type ProjectCreateWithoutClientInput = {
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutProjectsInput
   owner: Prisma.UserCreateNestedOneWithoutOwnedProjectsInput
+  ownerMembership: Prisma.MembershipCreateNestedOneWithoutOwnedProjectsInput
 }
 
 export type ProjectUncheckedCreateWithoutClientInput = {
   id?: string
-  organizationId: string
   ownerId: string
   name: string
   projectType: string
@@ -892,6 +997,7 @@ export type ProjectUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProjectsNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutProjectsNestedInput
+  ownerMembership?: Prisma.MembershipUpdateOneRequiredWithoutOwnedProjectsNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutOwnerInput = {
@@ -952,6 +1058,7 @@ export type ProjectUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneRequiredWithoutProjectsNestedInput
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProjectsNestedInput
+  ownerMembership?: Prisma.MembershipUpdateOneRequiredWithoutOwnedProjectsNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutOrganizationInput = {
@@ -984,9 +1091,66 @@ export type ProjectUncheckedUpdateManyWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type ProjectCreateManyOwnerMembershipInput = {
+  id?: string
+  clientId: string
+  name: string
+  projectType: string
+  status?: $Enums.ProjectStatus
+  budgetMinCents?: number | null
+  budgetMaxCents?: number | null
+  targetStartAt?: Date | string | null
+  targetEndAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ProjectUpdateWithoutOwnerMembershipInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  projectType?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  budgetMinCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  budgetMaxCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  targetStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  targetEndAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutProjectsNestedInput
+  client?: Prisma.ClientUpdateOneRequiredWithoutProjectsNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProjectsNestedInput
+}
+
+export type ProjectUncheckedUpdateWithoutOwnerMembershipInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  projectType?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  budgetMinCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  budgetMaxCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  targetStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  targetEndAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProjectUncheckedUpdateManyWithoutOwnerMembershipInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  projectType?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  budgetMinCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  budgetMaxCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  targetStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  targetEndAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type ProjectCreateManyClientInput = {
   id?: string
-  organizationId: string
   ownerId: string
   name: string
   projectType: string
@@ -1012,11 +1176,11 @@ export type ProjectUpdateWithoutClientInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProjectsNestedInput
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProjectsNestedInput
+  ownerMembership?: Prisma.MembershipUpdateOneRequiredWithoutOwnedProjectsNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   projectType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1031,7 +1195,6 @@ export type ProjectUncheckedUpdateWithoutClientInput = {
 
 export type ProjectUncheckedUpdateManyWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   projectType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1063,6 +1226,7 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  ownerMembership?: boolean | Prisma.MembershipDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
 
 export type ProjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1082,6 +1246,7 @@ export type ProjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  ownerMembership?: boolean | Prisma.MembershipDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
 
 export type ProjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1101,6 +1266,7 @@ export type ProjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  ownerMembership?: boolean | Prisma.MembershipDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
 
 export type ProjectSelectScalar = {
@@ -1124,16 +1290,19 @@ export type ProjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  ownerMembership?: boolean | Prisma.MembershipDefaultArgs<ExtArgs>
 }
 export type ProjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  ownerMembership?: boolean | Prisma.MembershipDefaultArgs<ExtArgs>
 }
 export type ProjectIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  ownerMembership?: boolean | Prisma.MembershipDefaultArgs<ExtArgs>
 }
 
 export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1142,6 +1311,7 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     organization: Prisma.$OrganizationPayload<ExtArgs>
     client: Prisma.$ClientPayload<ExtArgs>
     owner: Prisma.$UserPayload<ExtArgs>
+    ownerMembership: Prisma.$MembershipPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1554,6 +1724,7 @@ export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends runtime.
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   client<T extends Prisma.ClientDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientDefaultArgs<ExtArgs>>): Prisma.Prisma__ClientClient<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  ownerMembership<T extends Prisma.MembershipDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MembershipDefaultArgs<ExtArgs>>): Prisma.Prisma__MembershipClient<runtime.Types.Result.GetResult<Prisma.$MembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

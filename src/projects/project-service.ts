@@ -1,6 +1,13 @@
 import { requireMembership } from '@/auth/require-membership';
 import { createProjectInput, updateProjectInput } from './project-schema';
 import { canTransitionProject, type ProjectStatus } from './project-status';
+import {
+  ProjectNotFoundError,
+  ClientNotFoundError,
+  InvalidInputError,
+  InvalidOwnerError,
+  InvalidStateTransitionError,
+} from '@/errors/domain-errors';
 
 export async function listProjects(
   db: any,
@@ -48,7 +55,7 @@ export async function getProject(
   });
 
   if (!project) {
-    throw new Error('PROJECT_NOT_FOUND');
+    throw new ProjectNotFoundError();
   }
 
   return project;
@@ -60,20 +67,18 @@ export async function createProject(
   organizationId: string,
   input: unknown
 ) {
-  await requireMembership(db, userId, organizationId, 'clients:write');
+  await requireMembership(db, userId, organizationId, 'projects:write');
   const data = createProjectInput.parse(input);
 
   return db.$transaction(async (tx: any) => {
-    // 1. Verify client belongs to same organization and is active
     const client = await tx.client.findFirst({
       where: { id: data.clientId, organizationId, archivedAt: null },
     });
 
     if (!client) {
-      throw new Error('CLIENT_NOT_FOUND');
+      throw new ClientNotFoundError();
     }
 
-    // 2. Verify assigned owner has membership in organization
     const ownerMembership = await tx.membership.findUnique({
       where: {
         userId_organizationId: {
@@ -84,10 +89,9 @@ export async function createProject(
     });
 
     if (!ownerMembership) {
-      throw new Error('INVALID_OWNER');
+      throw new InvalidOwnerError();
     }
 
-    // 3. Create project
     const project = await tx.project.create({
       data: {
         organizationId,
@@ -107,7 +111,6 @@ export async function createProject(
       },
     });
 
-    // 4. Create atomic audit event
     await tx.auditEvent.create({
       data: {
         organizationId,
@@ -130,7 +133,7 @@ export async function updateProject(
   projectId: string,
   input: unknown
 ) {
-  await requireMembership(db, userId, organizationId, 'clients:write');
+  await requireMembership(db, userId, organizationId, 'projects:write');
   const data = updateProjectInput.parse(input);
 
   return db.$transaction(async (tx: any) => {
@@ -139,7 +142,7 @@ export async function updateProject(
     });
 
     if (!existing) {
-      throw new Error('PROJECT_NOT_FOUND');
+      throw new ProjectNotFoundError();
     }
 
     if (data.ownerId && data.ownerId !== existing.ownerId) {
@@ -153,7 +156,24 @@ export async function updateProject(
       });
 
       if (!ownerMembership) {
-        throw new Error('INVALID_OWNER');
+        throw new InvalidOwnerError();
+      }
+    }
+
+    // Merge existing values with partial update fields before invariant checks
+    const mergedMin = data.budgetMinCents !== undefined ? data.budgetMinCents : existing.budgetMinCents;
+    const mergedMax = data.budgetMaxCents !== undefined ? data.budgetMaxCents : existing.budgetMaxCents;
+    if (mergedMin !== null && mergedMin !== undefined && mergedMax !== null && mergedMax !== undefined) {
+      if (mergedMin > mergedMax) {
+        throw new InvalidInputError('budgetMinCents cannot exceed budgetMaxCents');
+      }
+    }
+
+    const mergedStart = data.targetStartAt !== undefined ? data.targetStartAt : existing.targetStartAt;
+    const mergedEnd = data.targetEndAt !== undefined ? data.targetEndAt : existing.targetEndAt;
+    if (mergedStart !== null && mergedStart !== undefined && mergedEnd !== null && mergedEnd !== undefined) {
+      if (new Date(mergedStart) > new Date(mergedEnd)) {
+        throw new InvalidInputError('targetStartAt cannot be after targetEndAt');
       }
     }
 
@@ -188,7 +208,7 @@ export async function transitionProjectStatus(
   projectId: string,
   toStatus: ProjectStatus
 ) {
-  await requireMembership(db, userId, organizationId, 'clients:write');
+  await requireMembership(db, userId, organizationId, 'projects:write');
 
   return db.$transaction(async (tx: any) => {
     const project = await tx.project.findFirst({
@@ -196,11 +216,13 @@ export async function transitionProjectStatus(
     });
 
     if (!project) {
-      throw new Error('PROJECT_NOT_FOUND');
+      throw new ProjectNotFoundError();
     }
 
     if (!canTransitionProject(project.status, toStatus)) {
-      throw new Error('INVALID_PROJECT_TRANSITION');
+      throw new InvalidStateTransitionError(
+        `Cannot transition project status from ${project.status} to ${toStatus}`
+      );
     }
 
     const updated = await tx.project.update({
