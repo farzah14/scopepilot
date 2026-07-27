@@ -76,3 +76,18 @@ export type Organization = Prisma.OrganizationModel
  * 
  */
 export type Membership = Prisma.MembershipModel
+/**
+ * Model Client
+ * 
+ */
+export type Client = Prisma.ClientModel
+/**
+ * Model Project
+ * 
+ */
+export type Project = Prisma.ProjectModel
+/**
+ * Model AuditEvent
+ * 
+ */
+export type AuditEvent = Prisma.AuditEventModel

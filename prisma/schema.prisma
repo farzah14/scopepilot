@@ -24,6 +24,18 @@ enum MembershipRole {
   VIEWER
 }
 
+enum ProjectStatus {
+  DRAFT
+  DISCOVERY
+  PROPOSAL_IN_PROGRESS
+  SENT
+  CLIENT_REVIEW
+  REVISION_REQUESTED
+  APPROVED
+  REJECTED
+  ARCHIVED
+}
+
 model User {
   id            String       @id @default(cuid())
   name          String
@@ -34,6 +46,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   memberships   Membership[]
+  ownedProjects Project[]    @relation("ProjectOwner")
+  auditEvents   AuditEvent[]
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
@@ -79,6 +93,9 @@ model Organization {
   timeZone        String       @default("Asia/Jakarta")
   defaultCurrency String       @default("IDR")
   memberships     Membership[]
+  clients         Client[]
+  projects        Project[]
+  auditEvents     AuditEvent[]
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 }
@@ -93,4 +110,59 @@ model Membership {
   createdAt      DateTime       @default(now())
 
   @@unique([userId, organizationId])
+}
+
+model Client {
+  id             String       @id @default(cuid())
+  organizationId String
+  name           String
+  contactName    String?
+  email          String?
+  phone          String?
+  industry       String?
+  notes          String?
+  archivedAt     DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  projects       Project[]
+
+  @@index([organizationId, archivedAt])
+}
+
+model Project {
+  id             String        @id @default(cuid())
+  organizationId String
+  clientId       String
+  ownerId        String
+  name           String
+  projectType    String
+  status         ProjectStatus @default(DRAFT)
+  budgetMinCents Int?
+  budgetMaxCents Int?
+  targetStartAt  DateTime?
+  targetEndAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client         Client        @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  owner          User          @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+
+  @@index([organizationId, status])
+  @@index([organizationId, clientId])
+}
+
+model AuditEvent {
+  id             String       @id @default(cuid())
+  organizationId String
+  actorId        String?
+  action         String
+  objectType     String
+  objectId       String
+  metadata       Json?
+  createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  actor          User?        @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, objectType, objectId, createdAt])
 }
