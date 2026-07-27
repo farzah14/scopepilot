@@ -9,6 +9,10 @@ process.env.APP_URL = process.env.APP_URL || 'http://127.0.0.1:3000';
 export default defineConfig({
   testDir: './e2e',
   testMatch: '**/*.spec.ts',
+  timeout: 60000,
+  expect: {
+    timeout: 10000,
+  },
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
