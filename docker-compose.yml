@@ -1,0 +1,7 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment: { POSTGRES_USER: scopepilot, POSTGRES_PASSWORD: scopepilot, POSTGRES_DB: scopepilot }
+    ports: ["5432:5432"]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U scopepilot"], interval: 5s, timeout: 5s, retries: 10 }
+volumes: { scopepilot_postgres: {} }
