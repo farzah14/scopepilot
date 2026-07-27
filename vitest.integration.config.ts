@@ -4,10 +4,12 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     environment: 'node',
-    include: ['src/**/*.test.ts'],
-    exclude: ['e2e/**', 'node_modules/**', 'src/**/*.integration.test.ts'],
+    include: ['src/**/*.integration.test.ts'],
+    exclude: ['e2e/**', 'node_modules/**'],
+    fileParallelism: false,
+    testTimeout: 30000,
     env: {
-      DATABASE_URL: 'postgresql://scopepilot:scopepilot@localhost:5432/scopepilot_test',
+      DATABASE_URL: process.env.TEST_DATABASE_URL || process.env.DATABASE_URL || 'postgresql://scopepilot:scopepilot@localhost:5432/scopepilot_test',
       AUTH_SECRET: '01234567890123456789012345678901',
       NEXTAUTH_SECRET: '01234567890123456789012345678901',
       APP_URL: 'http://localhost:3000',

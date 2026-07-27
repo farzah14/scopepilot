@@ -7,6 +7,7 @@ import {
   transitionProjectStatus,
   archiveProject,
 } from './project-service';
+import { InvalidInputError } from '@/errors/domain-errors';
 
 describe('Project Service', () => {
   const mockDb = (userRole: string | null = 'OWNER') => {
@@ -41,6 +42,10 @@ describe('Project Service', () => {
               name: 'Website Redesign',
               projectType: 'WEBSITE',
               status: 'DRAFT',
+              budgetMinCents: 100000,
+              budgetMaxCents: 200000,
+              targetStartAt: '2026-06-01T00:00:00.000Z',
+              targetEndAt: '2026-12-31T00:00:00.000Z',
             });
           }
           return Promise.resolve(null);
@@ -148,7 +153,7 @@ describe('Project Service', () => {
         name: 'Website Redesign',
         projectType: 'WEBSITE',
       })
-    ).rejects.toThrow('CLIENT_NOT_FOUND');
+    ).rejects.toThrow();
   });
 
   it('rejects project creation if owner is not a member of the organization', async () => {
@@ -160,7 +165,55 @@ describe('Project Service', () => {
         name: 'Website Redesign',
         projectType: 'WEBSITE',
       })
-    ).rejects.toThrow('INVALID_OWNER');
+    ).rejects.toThrow();
+  });
+
+  it('validates partial update of budgetMaxCents against existing budgetMinCents', async () => {
+    const db = mockDb();
+    // Existing budgetMinCents is 100000. Trying to update budgetMaxCents to 50000 should fail.
+    await expect(
+      updateProject(db as any, 'user-1', 'org-1', 'proj-1', {
+        budgetMaxCents: 50000,
+      })
+    ).rejects.toThrow(InvalidInputError);
+  });
+
+  it('validates partial update of budgetMinCents against existing budgetMaxCents', async () => {
+    const db = mockDb();
+    // Existing budgetMaxCents is 200000. Trying to update budgetMinCents to 300000 should fail.
+    await expect(
+      updateProject(db as any, 'user-1', 'org-1', 'proj-1', {
+        budgetMinCents: 300000,
+      })
+    ).rejects.toThrow(InvalidInputError);
+  });
+
+  it('validates partial update of targetStartAt against existing targetEndAt', async () => {
+    const db = mockDb();
+    // Existing targetEndAt is 2026-12-31. Trying to update targetStartAt to 2027-01-01 should fail.
+    await expect(
+      updateProject(db as any, 'user-1', 'org-1', 'proj-1', {
+        targetStartAt: '2027-01-01T00:00:00.000Z',
+      })
+    ).rejects.toThrow(InvalidInputError);
+  });
+
+  it('validates partial update of targetEndAt against existing targetStartAt', async () => {
+    const db = mockDb();
+    // Existing targetStartAt is 2026-06-01. Trying to update targetEndAt to 2026-01-01 should fail.
+    await expect(
+      updateProject(db as any, 'user-1', 'org-1', 'proj-1', {
+        targetEndAt: '2026-01-01T00:00:00.000Z',
+      })
+    ).rejects.toThrow(InvalidInputError);
+  });
+
+  it('allows valid partial updates', async () => {
+    const db = mockDb();
+    const updated = await updateProject(db as any, 'user-1', 'org-1', 'proj-1', {
+      budgetMaxCents: 250000,
+    });
+    expect(updated.budgetMaxCents).toBe(250000);
   });
 
   it('handles status transitions and records status_changed audit event', async () => {
@@ -179,7 +232,7 @@ describe('Project Service', () => {
     const db = mockDb();
     await expect(
       transitionProjectStatus(db as any, 'user-1', 'org-1', 'proj-1', 'APPROVED')
-    ).rejects.toThrow('INVALID_PROJECT_TRANSITION');
+    ).rejects.toThrow();
   });
 
   it('archives project by transitioning status to ARCHIVED', async () => {

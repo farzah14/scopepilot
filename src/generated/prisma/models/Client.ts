@@ -252,6 +252,7 @@ export type ClientOrderByWithRelationInput = {
 
 export type ClientWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  id_organizationId?: Prisma.ClientIdOrganizationIdCompoundUniqueInput
   AND?: Prisma.ClientWhereInput | Prisma.ClientWhereInput[]
   OR?: Prisma.ClientWhereInput[]
   NOT?: Prisma.ClientWhereInput | Prisma.ClientWhereInput[]
@@ -267,7 +268,7 @@ export type ClientWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Client"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   projects?: Prisma.ProjectListRelationFilter
-}, "id">
+}, "id" | "id_organizationId">
 
 export type ClientOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -412,6 +413,11 @@ export type ClientListRelationFilter = {
 
 export type ClientOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type ClientIdOrganizationIdCompoundUniqueInput = {
+  id: string
+  organizationId: string
 }
 
 export type ClientCountOrderByAggregateInput = {

@@ -1,34 +1,50 @@
 import { redirect } from 'next/navigation';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
 import { db } from '@/db/client';
 import { createClient } from '@/clients/client-service';
+import { requireAuthenticatedUser, getWorkspaceContext } from '@/auth/session-helper';
+import { handlePageError } from '@/errors/error-handler';
 
-export default function NewClientPage() {
+export default async function NewClientPage() {
   async function handleCreateClient(formData: FormData) {
     'use server';
 
-    const session = await getServerSession(authOptions);
-    const userId = session?.user ? (session.user as any).id : 'demo-user';
-    const organizationId = (session?.user as any)?.organizationId || 'demo-org';
+    try {
+      const user = await requireAuthenticatedUser();
+      const orgIdParam = String(formData.get('orgId') || '');
+      const { organizationId } = await getWorkspaceContext(
+        db,
+        user.id,
+        orgIdParam || undefined,
+        'clients:write'
+      );
 
-    const name = String(formData.get('name') || '');
-    const contactName = String(formData.get('contactName') || '');
-    const email = String(formData.get('email') || '');
-    const phone = String(formData.get('phone') || '');
-    const industry = String(formData.get('industry') || '');
-    const notes = String(formData.get('notes') || '');
+      const name = String(formData.get('name') || '');
+      const contactName = String(formData.get('contactName') || '');
+      const email = String(formData.get('email') || '');
+      const phone = String(formData.get('phone') || '');
+      const industry = String(formData.get('industry') || '');
+      const notes = String(formData.get('notes') || '');
 
-    const newClient = await createClient(db, userId, organizationId, {
-      name,
-      contactName,
-      email,
-      phone,
-      industry,
-      notes,
-    });
+      const newClient = await createClient(db, user.id, organizationId, {
+        name,
+        contactName,
+        email,
+        phone,
+        industry,
+        notes,
+      });
 
-    redirect(`/clients/${newClient.id}`);
+      redirect(`/clients/${newClient.id}`);
+    } catch (error) {
+      handlePageError(error);
+    }
+  }
+
+  try {
+    const user = await requireAuthenticatedUser();
+    await getWorkspaceContext(db, user.id, undefined, 'clients:write');
+  } catch (error) {
+    return handlePageError(error);
   }
 
   return (
