@@ -15,6 +15,9 @@ vi.mock('next/navigation', () => ({
   notFound: vi.fn(() => {
     throw new Error('NEXT_NOT_FOUND');
   }),
+  forbidden: vi.fn(() => {
+    throw new Error('NEXT_FORBIDDEN');
+  }),
 }));
 
 describe('error-handler', () => {
@@ -22,17 +25,25 @@ describe('error-handler', () => {
     expect(() => handlePageError(new UnauthenticatedError())).toThrow('REDIRECT:/api/auth/signin');
   });
 
-  it('calls notFound() for NotFoundError subclasses', () => {
-    expect(() => handlePageError(new NotFoundError())).toThrow('NEXT_NOT_FOUND');
+  it('1. maps insufficient role permission (ForbiddenError) to HTTP 403 (forbidden())', () => {
+    const error = new ForbiddenError('User lacks permission clients:write in organization org-1');
+    expect(() => handlePageError(error)).toThrow('NEXT_FORBIDDEN');
+  });
+
+  it('2. maps missing workspace membership (ForbiddenError) to HTTP 403 (forbidden())', () => {
+    const error = new ForbiddenError('User has no workspace memberships');
+    expect(() => handlePageError(error)).toThrow('NEXT_FORBIDDEN');
+  });
+
+  it('3. maps absent tenant-scoped client (ClientNotFoundError) to HTTP 404 (notFound())', () => {
     expect(() => handlePageError(new ClientNotFoundError())).toThrow('NEXT_NOT_FOUND');
+  });
+
+  it('4. maps absent tenant-scoped project (ProjectNotFoundError) to HTTP 404 (notFound())', () => {
     expect(() => handlePageError(new ProjectNotFoundError())).toThrow('NEXT_NOT_FOUND');
   });
 
-  it('calls notFound() for ForbiddenError', () => {
-    expect(() => handlePageError(new ForbiddenError())).toThrow('NEXT_NOT_FOUND');
-  });
-
-  it('rethrows unexpected runtime or database errors', () => {
+  it('5. rethrows unexpected database or runtime errors', () => {
     const error = new Error('Database connection failed');
     expect(() => handlePageError(error)).toThrow('Database connection failed');
   });

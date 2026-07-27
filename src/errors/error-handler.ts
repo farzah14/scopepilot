@@ -1,9 +1,8 @@
-import { redirect, notFound } from 'next/navigation';
+import { redirect, notFound, forbidden } from 'next/navigation';
 import {
   UnauthenticatedError,
   ForbiddenError,
   NotFoundError,
-  DomainError,
 } from '@/errors/domain-errors';
 
 export function handlePageError(error: unknown): never {
@@ -11,7 +10,11 @@ export function handlePageError(error: unknown): never {
     redirect('/api/auth/signin');
   }
 
-  if (error instanceof NotFoundError || error instanceof ForbiddenError) {
+  if (error instanceof ForbiddenError) {
+    forbidden();
+  }
+
+  if (error instanceof NotFoundError) {
     notFound();
   }
 
