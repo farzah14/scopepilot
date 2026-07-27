@@ -19,3 +19,18 @@ export const MembershipRole = {
 } as const
 
 export type MembershipRole = (typeof MembershipRole)[keyof typeof MembershipRole]
+
+
+export const ProjectStatus = {
+  DRAFT: 'DRAFT',
+  DISCOVERY: 'DISCOVERY',
+  PROPOSAL_IN_PROGRESS: 'PROPOSAL_IN_PROGRESS',
+  SENT: 'SENT',
+  CLIENT_REVIEW: 'CLIENT_REVIEW',
+  REVISION_REQUESTED: 'REVISION_REQUESTED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ProjectStatus = (typeof ProjectStatus)[keyof typeof ProjectStatus]
