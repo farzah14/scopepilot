@@ -12,6 +12,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:integration": "vitest run src/security",
     "test:e2e": "playwright test",
     "postinstall": "prisma generate"
   },

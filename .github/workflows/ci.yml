@@ -54,6 +54,10 @@ jobs:
         env:
           NODE_ENV: test
 
+      - run: pnpm test:integration
+        env:
+          NODE_ENV: test
+
       - run: pnpm build
         env:
           NODE_ENV: production
