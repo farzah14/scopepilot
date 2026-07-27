@@ -1,10 +1,15 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const baseURL =
+  process.env.APP_URL ??
+  process.env.NEXTAUTH_URL ??
+  'http://127.0.0.1:3000';
+
 process.env.DATABASE_URL = process.env.DATABASE_URL || 'postgresql://scopepilot:scopepilot@localhost:5432/scopepilot_test';
 process.env.AUTH_SECRET = process.env.AUTH_SECRET || '01234567890123456789012345678901';
 process.env.NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || '01234567890123456789012345678901';
-process.env.NEXTAUTH_URL = process.env.NEXTAUTH_URL || 'http://127.0.0.1:3000';
-process.env.APP_URL = process.env.APP_URL || 'http://127.0.0.1:3000';
+process.env.NEXTAUTH_URL = process.env.NEXTAUTH_URL || baseURL;
+process.env.APP_URL = process.env.APP_URL || baseURL;
 
 export default defineConfig({
   testDir: './e2e',
@@ -19,7 +24,7 @@ export default defineConfig({
   workers: 1,
   reporter: 'html',
   use: {
-    baseURL: 'http://127.0.0.1:3000',
+    baseURL,
     trace: 'on-first-retry',
   },
   projects: [
@@ -30,7 +35,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'pnpm dev',
-    url: 'http://127.0.0.1:3000',
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
   },
 });
