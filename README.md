@@ -1,30 +1,140 @@
-# ScopePilot Implementation Plans
+# ScopePilot
 
-This archive contains ten phase-specific implementation plans derived from the ScopePilot PRD. Execute them in numeric order. Each phase is intended to produce working, testable software and uses test-driven development with focused commits.
+ScopePilot is a multi-tenant proposal and scope-management platform for digital agencies.
 
-## Assumed stack
+The product vision is to convert fragmented client information into structured requirements, proposals, approvals, and controlled scope changes. The current codebase implements the application foundation, authentication and workspaces, plus tenant-scoped client and project management.
 
-- Node.js 22 LTS and pnpm 10
-- Next.js 16.2 LTS App Router and TypeScript
-- PostgreSQL 17 and Prisma ORM 7
-- Auth.js
-- Zod, Vitest, Testing Library, and Playwright
-- Private object storage for commercial files
-- Vercel AI SDK structured outputs
-- Stripe in test mode until launch approval
-- GitHub Actions and Vercel
+## Current implementation status
 
-## Execution order
+### Implemented
 
-1. `01-foundation/implementation_plan.md`
-2. `02-auth-workspaces/implementation_plan.md`
-3. `03-client-projects/implementation_plan.md`
-4. `04-brief-intake/implementation_plan.md`
-5. `05-ai-requirement-extraction/implementation_plan.md`
-6. `06-proposal-builder/implementation_plan.md`
-7. `07-client-review-approval/implementation_plan.md`
-8. `08-scope-guard/implementation_plan.md`
-9. `09-change-requests/implementation_plan.md`
-10. `10-billing-launch/implementation_plan.md`
+- Next.js App Router application with TypeScript
+- PostgreSQL persistence through Prisma ORM
+- Credentials authentication with password hashing
+- Organizations, memberships, and role-based permissions
+- Tenant-scoped client creation, editing, listing, and archiving
+- Tenant-scoped project creation, editing, ownership, and lifecycle transitions
+- Audit events for client and project mutations
+- Database constraints that prevent cross-tenant client and project relationships
+- Unit, integration, and Playwright end-to-end test suites
+- GitHub Actions verification pipeline
 
-Before executing a phase, create an isolated worktree and use either subagent-driven development or the executing-plans workflow. Do not execute later phases before the required earlier data models and domain services exist.
+### Planned
+
+The following capabilities are defined in the product requirements and phase plans but are not yet implemented:
+
+- Brief intake and document uploads
+- AI-assisted requirement extraction
+- Proposal construction and pricing packages
+- Client review, revision, and approval
+- Approved-scope preservation and comparison
+- Change-request generation
+- Billing and launch operations
+
+Do not describe planned capabilities as available product features.
+
+## Technology stack
+
+- Node.js 22+
+- pnpm 10
+- Next.js 16.2 and React 19
+- TypeScript
+- PostgreSQL 17
+- Prisma ORM 7
+- NextAuth.js with the Prisma adapter
+- Zod
+- Vitest
+- Playwright
+- GitHub Actions
+
+## Run locally
+
+### Prerequisites
+
+Install:
+
+- Node.js 22.12 or later
+- pnpm 10
+- Docker Desktop or another PostgreSQL 17 installation
+
+### 1. Clone and install
+
+```bash
+git clone https://github.com/farzah14/scopepilot.git
+cd scopepilot
+pnpm install
+```
+
+### 2. Configure environment variables
+
+```bash
+cp .env.example .env
+```
+
+The example configuration expects PostgreSQL on `localhost:5432` and uses separate development and test databases.
+
+Generate secure authentication secrets before using the application outside local development.
+
+### 3. Start PostgreSQL
+
+```bash
+docker compose up -d postgres
+```
+
+Create the test database if it does not already exist:
+
+```bash
+docker compose exec postgres createdb -U scopepilot scopepilot_test
+```
+
+### 4. Prepare the database
+
+```bash
+pnpm prisma generate
+pnpm prisma migrate deploy
+```
+
+### 5. Start the application
+
+```bash
+pnpm dev
+```
+
+Open `http://localhost:3000`.
+
+For a detailed setup walkthrough, see [`docs/tutorials/local-development.md`](docs/tutorials/local-development.md).
+
+## Verification commands
+
+Run the same major checks used by continuous integration:
+
+```bash
+pnpm prisma validate
+pnpm typecheck
+pnpm test
+pnpm test:integration
+pnpm build
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
+
+Integration and end-to-end tests must target a database whose name clearly indicates that it is a test database. The E2E seed helper rejects unsafe database targets.
+
+## Architecture and security
+
+See [`docs/reference/architecture.md`](docs/reference/architecture.md) for:
+
+- tenancy boundaries
+- authentication and workspace resolution
+- roles and permissions
+- client and project domain services
+- project status transitions
+- audit logging
+- test layers and CI behavior
+
+## Product and implementation documents
+
+- Product requirements: [`docs/specs/scopepilot-product-requirements.md`](docs/specs/scopepilot-product-requirements.md)
+- Phase plans: [`docs/superpowers/plans/`](docs/superpowers/plans/)
+
+The phase plans describe intended implementation work. The source code and current-state documentation are authoritative for what exists today.
